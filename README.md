@@ -1,4 +1,4 @@
-# DHSProject
+# ImageDetectionStudy
 
 ## Table of Contents
 
