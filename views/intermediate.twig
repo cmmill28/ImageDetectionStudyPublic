@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Practice Round</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/confidence.css">
+</head>
+<body>
+<div class="container text-center mt-4">
+    <h1>Welcome, {{ userID }}</h1>
+    <p>
+        You are about to start the practice round. The interface will look like this:
+    </p>
+    <!-- Placeholder for template image -->
+    <img src="images\templatephoto.png" alt="Template Image" class="img-fluid my-3">
+    <p>
+    <span class="text-danger">NOTE:</span> The target image may be any color, rotated any direction, and may be partially off the screen.
+    </p>
+    <p>
+        You will determine whether or not you believe the target image is in the photo. To assist learning, you will be able to check to see if you are correct or not before moving on. <br><br><strong>If you do not make an earnest effort, and rely only on the check, you may be disqualified.</strong><br><br> It is important that you learn to identify the image for later exercises. Please click the button below to proceed.
+    </p>
+    <form action="/activity" method="POST">
+        <input type="hidden" name="userID" value="{{ userID }}">
+        <button type="submit" class="btn btn-primary">Start Practice Round</button>
+    </form>
+</div>
+</body>
+</html>

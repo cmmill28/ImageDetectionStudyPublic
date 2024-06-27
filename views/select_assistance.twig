@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Assistance</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/interface.css">
+</head>
+<body>
+<div class="container text-center mt-4">
+    <h1>Select Assistance</h1>
+    <form action="/activity/{{ userID }}/select_assistance" method="post">
+        <input type="hidden" name="iteration" value="{{ iteration }}">
+        <button type="submit" name="selectedOption" value="dssOption1" class="btn btn-primary btn-lg m-2">
+            Human Assistance: {{ option1.expertise | capitalize }}
+        </button>
+        <button type="submit" name="selectedOption" value="dssOption2" class="btn btn-primary btn-lg m-2">
+            Machine Assistance: {{ option2.expertise | capitalize }}
+        </button>
+    </form>
+</div>
+</body>
+</html>

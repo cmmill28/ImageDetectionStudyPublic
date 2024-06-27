@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confidence Assessment</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/confidence.css">
+    <style>
+        .range-container {
+            position: relative;
+            width: 100%;
+        }
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            width: 100%;
+            top: 25px; /* Moved below the slider */
+        }
+        .range-label {
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center mt-4">
+        <h1>Confidence Assessment</h1>
+        <form id="confidenceForm" action="{{ nextRoute }}" method="post">
+            <label for="confidence">Please rate your confidence in your answers:</label>
+            <div class="range-container">
+                <input type="range" name="confidence" min="0" max="10" step="1" value="5" class="form-control-range">
+                <div class="range-labels">
+                    <span class="range-label">0</span>
+                    <span class="range-label">1</span>
+                    <span class="range-label">2</span>
+                    <span class="range-label">3</span>
+                    <span class="range-label">4</span>
+                    <span class="range-label">5</span>
+                    <span class="range-label">6</span>
+                    <span class="range-label">7</span>
+                    <span class="range-label">8</span>
+                    <span class="range-label">9</span>
+                    <span class="range-label">10</span>
+                </div><br>
+            </div>
+            <p>Your confidence: <span id="confidenceValue">5</span>/10</p><br>
+
+            <div id="additionalQuestions" style="display: none;">
+                <div class="form-group mt-3">
+                    <label for="useRecommendation">How often did you use the recommendation to inform your final decision?</label>
+                    <div class="range-container">
+                        <input type="range" name="useRecommendation" min="0" max="10" step="1" value="5" class="form-control-range">
+                        <div class="range-labels">
+                            <span class="range-label">0</span>
+                            <span class="range-label">1</span>
+                            <span class="range-label">2</span>
+                            <span class="range-label">3</span>
+                            <span class="range-label">4</span>
+                            <span class="range-label">5</span>
+                            <span class="range-label">6</span>
+                            <span class="range-label">7</span>
+                            <span class="range-label">8</span>
+                            <span class="range-label">9</span>
+                            <span class="range-label">10</span>
+                        </div>
+                    </div><br>
+                    <p>Your response: <span id="useRecommendationValue">5</span>/10</p><br>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="reliability">How reliable do you think the assistive system was?</label>
+                    <div class="range-container">
+                        <input type="range" name="reliability" min="0" max="10" step="1" value="5" class="form-control-range">
+                        <div class="range-labels">
+                            <span class="range-label">0</span>
+                            <span class="range-label">1</span>
+                            <span class="range-label">2</span>
+                            <span class="range-label">3</span>
+                            <span class="range-label">4</span>
+                            <span class="range-label">5</span>
+                            <span class="range-label">6</span>
+                            <span class="range-label">7</span>
+                            <span class="range-label">8</span>
+                            <span class="range-label">9</span>
+                            <span class="range-label">10</span>
+                        </div>
+                    </div><br>
+                    <p>Your response: <span id="reliabilityValue">5</span>/10</p><br>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="choiceReason">Why did you choose the {{ chosenAssistance }} assistance?</label>
+                    <textarea class="form-control" id="choiceReason" name="choiceReason" rows="3" required></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success mt-3">Submit Confidence</button>
+        </form>
+    </div>
+    <script>
+        const confidenceInput = document.querySelector('input[name="confidence"]');
+        const confidenceValue = document.getElementById('confidenceValue');
+        confidenceInput.addEventListener('input', function() {
+            confidenceValue.textContent = confidenceInput.value;
+        });
+
+        const useRecommendationInput = document.querySelector('input[name="useRecommendation"]');
+        const useRecommendationValue = document.getElementById('useRecommendationValue');
+        useRecommendationInput.addEventListener('input', function() {
+            useRecommendationValue.textContent = useRecommendationInput.value;
+        });
+
+        const reliabilityInput = document.querySelector('input[name="reliability"]');
+        const reliabilityValue = document.getElementById('reliabilityValue');
+        reliabilityInput.addEventListener('input', function() {
+            reliabilityValue.textContent = reliabilityInput.value;
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const isPracticeRound = {{ isPracticeRound }};
+            const chosenAssistance = "{{ chosenAssistance }}";
+            const additionalQuestions = document.getElementById('additionalQuestions');
+            const choiceReason = document.getElementById('choiceReason');
+
+            if (!isPracticeRound) {
+                additionalQuestions.style.display = 'block';
+                choiceReason.setAttribute('required', true);
+                document.getElementById('choiceReason').placeholder = `Why did you choose the ${chosenAssistance} assistance?`;
+            } else {
+                choiceReason.removeAttribute('required');
+            }
+
+            // Ensure all fields are filled before enabling form submission
+            const form = document.getElementById('confidenceForm');
+            form.addEventListener('submit', function(event) {
+                if (!isPracticeRound) {
+                    const confidence = document.querySelector('input[name="confidence"]').value;
+                    const useRecommendation = document.querySelector('input[name="useRecommendation"]').value;
+                    const reliability = document.querySelector('input[name="reliability"]').value;
+                    const choiceReasonValue = choiceReason.value.trim();
+
+                    if (!confidence || !useRecommendation || !reliability || choiceReasonValue === '') {
+                        event.preventDefault();
+                        alert('Please complete all fields before submitting the form.');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Start</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/stylesheets/intro.css">
+    <style>
+            body{
+            font-size: x-large;
+        }
+    </style>
+</head>
+<body>
+    <div class="containerIntro">
+        <div class="float left">
+            <div class="text-danger">{{ error }}</div>
+            <h1 class="py-4">Introduction</h1>
+            <p>Welcome to our study on <strong>Shape and Object Detection in Images.</strong> This study should take around 30 minutes to complete.</p>
+            <p>This study will ask you to perform different exercises related to object detection. For each question, you will be asked to determine if you believe a specified object is or isn't in an image. Sometimes, you will be presented with options for you to select a support system to assist you with the task; this system will provide a recommendation that you may choose to follow or ignore. From this study, we want to better understand participants' preference and utilization of these support systems.</p>
+            <h1 class="py-2">Task</h1>
+            <p>You will be assigned a number of exercises where you will be prompted to look for a specified object in an image. For each exercise, you will be asked to respond to the question: "Is this object in the image?"<br><br>You will have 30 seconds to respond to these questions. If you are unable to answer these questions within the 30-second time frame, the image will disappear, and you will have to submit your answers.</p>
+            <p><span class="text-danger">NOTE:</span> Your compensation will not be affected by your performance. Some questions are purposely challenging, and it may be difficult to answer the questions accurately. If you are unsure about a certain question, we ask that you please answer it to the best of your ability.</p>
+            <h1 class="py-2">When Finished...</h1>
+            <p>After you have finished all the questions, there is a Demographics Questionnaire. Please complete it. When you have completed the Demographics Questionnaire, a redeem code will be spawned on the page. Please enter this redeem code in Amazon Mechanical Turk in order to get your compensation.</p>
+            <p class="forbiddenP"><strong>Please do not use the back/forward or refresh features of your browser as they will end your session and you will not be paid.</strong></p>
+            <p id="input-text">Please input your Amazon Turk Worker ID and click “Next”.</p>
+            <div class="footer4introduce">
+                <div class="text-danger">{{ error }}</div>
+                <form autocomplete="off" method="POST" action="/intermediate">
+                    <input autocomplete="off" type="text" class="form-control" placeholder="Amazon Turk Worker ID" aria-label="Amazon Turk Worker ID" aria-describedby="basic-addon2" name="userID">
+                    <button type="submit" class="btn btn-success" id="startStudyBtn">Next</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Practice Questions</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/javascripts/loadactivity.js"></script>
+    <link rel="stylesheet" href="/stylesheets/activity.css">
+</head>
+<body>
+<div class="container text-center mt-4">
+    <div class="d-flex justify-content-center py-2" id="userID">UserID: <div name="userID" style="display:inline" id="userID">{{ userID }}</div></div>
+    <h1 class="py-2">Practice Questions {{ questionNumber }} of 15</h1>
+    <p class="py-2 text-danger" id="errorText1">{{ error }}</p>
+    <p><b>Can you find this object in the image below?</b></p>
+    <img id="targetObject" src="/images/activity/practice/target1.png" alt="Target Object" style="max-width: 100px;">
+    <p class="text-danger">Time remaining: <span id="time">00:30</span></p>
+    <div class="content-wrapper">
+        <div class="container mainContainer">
+            <div class="image-container">
+                <img id="img2find" src="/images/activity/practice/{{ questionImage }}" alt="Question Image" class="large-image">
+                <div id="timeup-message" class="text-danger" style="display: none;">Times up! Submit your answer.</div>
+            </div>
+        </div>
+        <div class="text-container">
+            <div class="info-text">
+                <p>This is the practice round. <br><br> Do your best to find the object and use the check button to test your response.</p>
+            </div>
+            <div class="answeractivity">
+                <p>Is the object in this image?</p>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons" onclick="enableFunction()">
+                    <label class="btn btn-secondary" id="option11">
+                        <input type="radio" name="answer" value="Yes" autocomplete="off" onclick="enableFunction()"> Yes
+                    </label>
+                    <label class="btn btn-secondary" id="option12">
+                        <input type="radio" name="answer" value="No" autocomplete="off" onclick="enableFunction()"> No
+                    </label>
+                </div>
+                <form id="subForm" action="/activity/{{ userID }}/practice" method="POST">
+                    <input type="hidden" id="questionNumber" name="questionNumber" value="{{ questionNumber }}">
+                    <input type="hidden" id="correctAnswer" name="correctAnswer" value="{{ correctAnswer }}">
+                    <input type="hidden" id="timeTaken" name="timeTaken" value="">
+                    <input type="hidden" id="timeExpired" name="timeExpired" value="false">
+                    <input type="hidden" id="selectedAnswer" name="selectedAnswer" value="">
+                    <p class="py-2 text-danger" id="errorText2">{{ error }}</p>
+                    <button type="button" class="btn btn-outline-primary" id="checkButton" disabled>Check</button><br><br>
+                    <input type="submit" class="btn btn-outline-success" id="submitButton" value="Next" disabled>
+                </form>
+                <div class="alert alert-info mt-4" id="feedback" style="display:none;">
+                    <strong id="feedbackText"></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function enableFunction(){
+        document.getElementById("checkButton").disabled = false;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkButton = document.getElementById('checkButton');
+        const submitButton = document.getElementById('submitButton');
+        const feedback = document.getElementById('feedback');
+        const feedbackText = document.getElementById('feedbackText');
+        const img2find = document.getElementById('img2find');
+        const timeupMessage = document.getElementById('timeup-message');
+        let checked = false;
+        let timeExpired = false;
+
+        document.querySelectorAll('input[name="answer"]').forEach(input => {
+            input.addEventListener('change', function() {
+                checkButton.disabled = false;
+                checkButton.removeAttribute('disabled');  // Force update
+                submitButton.disabled = true;
+                feedback.style.display = 'none';
+                checked = false;
+                console.log('Radio button selected, checkButton enabled');
+            });
+        });
+
+        checkButton.addEventListener('click', function(event) {
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (!selectedAnswer) {
+                event.preventDefault();
+                alert('Please select Yes or No before checking.');
+                return;
+            }
+            const correctAnswer = document.getElementById('correctAnswer').value;
+            if (selectedAnswer.value === correctAnswer) {
+                feedbackText.textContent = 'Correct!';
+                feedback.classList.remove('alert-danger');
+                feedback.classList.add('alert-info');
+            } else {
+                feedbackText.textContent = `Incorrect. The correct answer was: ${correctAnswer}`;
+                feedback.classList.remove('alert-info');
+                feedback.classList.add('alert-danger');
+            }
+
+            feedback.style.display = 'block';
+            submitButton.disabled = false;
+            submitButton.removeAttribute('disabled');  // Force update
+            checked = true;
+            console.log('Check button clicked, submitButton enabled');
+        });
+
+        document.getElementById('subForm').onsubmit = function(event) {
+            if (!checked) {
+                event.preventDefault(); // Prevent the form from submitting
+                alert('Please check your answer before submitting.');
+                return false; // Prevent the form from submitting
+            }
+
+            var timeLeft = document.getElementById("time").innerHTML;
+            timeLeft = 30 - parseInt(timeLeft.split(':')[1]); // Calculate time taken
+            if (timeLeft < 0) timeLeft = 30; // Ensure time taken is valid
+            document.getElementById('timeTaken').value = timeLeft; // Set hidden input value
+            document.getElementById('timeExpired').value = timeExpired;
+
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked').value;
+            document.getElementById('selectedAnswer').value = selectedAnswer;
+
+            console.log('Form submitted successfully');
+        };
+
+        // Add event listeners to toggle buttons for better visual feedback
+        const toggleButtons = document.querySelectorAll('.btn-group-toggle .btn');
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                toggleButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        var duration = 30; // 30 seconds
+        var display = document.querySelector('#time');
+        startTimer(duration, display);
+
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            const interval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    timeExpired = true;
+                    display.textContent = "00:00";
+                    timeupMessage.style.display = 'block';
+                    img2find.classList.add('hidden');
+                    clearInterval(interval);
+                }
+            }, 1000);
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Next Section</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/confidence.css">
+</head>
+<body>
+    <div class="container text-center mt-4">
+        <h1>Next Section</h1>
+        <p class="lead"><strong>Congratulations on completing the practice questions!</strong></p>
+        <p><em>Please pay close attention to the following instructions:</em></p>
+        <p><strong>In the next part of the activity, you will be asked to complete a series of question blocks.<br><br> Each block will present you with two options.<br><br> You will choose one of them to assist you in the following round, you may use the provided assistance as needed.</strong></p>
+        <p>Click the button below to proceed to the main portion of the activity.</p>
+        <form action="/activity/{{ userID }}/buffer/next" method="post">
+            <button type="submit" class="btn btn-primary">Proceed to Next Section</button>
+        </form>
+    </div>
+</body>
+</html>
