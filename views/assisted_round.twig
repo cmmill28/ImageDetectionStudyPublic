@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assisted Round</title>
+    <!-- Include the viewport meta tag for responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Include your custom CSS -->
+    <link rel="stylesheet" href="/stylesheets/activity.css">
+    <!-- Additional CSS styles -->
+    <style>
+        /* Reset margins and paddings for the entire document */
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        /* Wrapper for the entire content */
+        #complete {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Container that will be scaled */
+        #scaling-container {
+            width: 1920px; /* Set this to your content's original width */
+            height: 1080px; /* Set this to your content's original height */
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Ensure your content fits within the scaling container */
+        .container {
+            width: 100%;
+            height: 100%;
+            /* Remove any absolute positioning or fixed sizes */
+        }
+
+        /* Your existing CSS styles can remain in your activity.css file */
+    </style>
+</head>
+<body>
+    <div id="complete">
+        <div id="scaling-container">
+            <!-- Main container -->
+            <div class="container text-center mt-4">
+                <h1>Assisted Round: Question {{ questionNumber }} of 6</h1>
+                <p class="py-2 text-danger" id="errorText1">{{ error }}</p>
+                <p><b>Can you find this object in the image below?</b></p>
+                <img id="targetObject" src="/images/activity/practice/target1.png" alt="Target Object" style="max-width: 100px;">
+                <p class="text-danger">Time remaining: <span id="time">00:15</span></p>
+                <div class="content-wrapper">
+                    <div class="container mainContainer">
+                        <div class="image-container">
+                            <img id="img2find" src="/images/activity/assisted_round/{{ questionImage }}" alt="Question Image" class="large-image">
+                            <div id="timeup-message" class="text-danger" style="display: none;">Time's up! Submit your answer.</div>
+                        </div>
+                    </div>
+                    <div class="text-container">
+                     <div class="info-text">
+                          <!-- Change "Recommendation" to "Target" and format the recommendation -->
+                          <p>Recommendation: <span id="recommendationText">{{ recommendation }}</span></p>
+
+                          <!-- Display the source information -->
+                          <p>{{ source }}</p>
+                    </div>
+                        <div class="answeractivity">
+                            <p>Is the object in this image?</p>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-secondary" id="option11">
+                                    <input type="radio" name="answer" value="Yes" autocomplete="off"> Yes
+                                </label>
+                                <label class="btn btn-secondary" id="option12">
+                                    <input type="radio" name="answer" value="No" autocomplete="off"> No
+                                </label>
+                            </div>
+                            <form id="subForm" action="/activity/{{ userID }}/assisted_round" method="POST">
+                                <input type="hidden" id="questionNumber" name="questionNumber" value="{{ questionNumber }}">
+                                <input type="hidden" id="iteration" name="iteration" value="{{ iteration }}">
+                                <input type="hidden" id="timeTaken" name="timeTaken" value="">
+                                <input type="hidden" id="timeExpired" name="timeExpired" value="false">
+                                <input type="hidden" id="selectedAnswer" name="selectedAnswer" value="">
+                                <input type="hidden" id="recommendation" name="recommendation" value="{{ recommendation }}">
+                                <input type="hidden" id="questionImage" name="questionImage" value="{{ questionImage }}">
+                                <p class="py-2 text-danger" id="errorText2">{{ error }}</p>
+                                <input type="submit" class="btn btn-outline-success" id="submitButton" value="Submit">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of your content -->
+        </div>
+    </div>
+
+    <!-- JavaScript to handle scaling -->
+    <script>
+        function scaleContent() {
+            var scalingContainer = document.getElementById('scaling-container');
+            var designWidth = 1920;  // Set this to your content's original width
+            var designHeight = 1080; // Set this to your content's original height
+
+            var windowWidth = window.innerWidth;
+            var windowHeight = window.innerHeight;
+
+            var scaleX = windowWidth / designWidth;
+            var scaleY = windowHeight / designHeight;
+
+            var scale = Math.min(scaleX, scaleY);
+
+            scalingContainer.style.transform = 'scale(' + scale + ')';
+            scalingContainer.style.transformOrigin = 'top left';
+
+            // Position the content at the top-left corner
+            scalingContainer.style.position = 'absolute';
+            scalingContainer.style.left = '0';
+            scalingContainer.style.top = '0';
+
+            // Optionally, center horizontally if content is narrower than viewport
+            var scaledWidth = designWidth * scale;
+            var scaledHeight = designHeight * scale;
+
+            if (scaledWidth < windowWidth) {
+                scalingContainer.style.left = ((windowWidth - scaledWidth) / 2) + 'px';
+            } else {
+                scalingContainer.style.left = '0';
+            }
+
+            // Keep the content aligned to the top to ensure the bottom is visible
+            scalingContainer.style.top = '0';
+        }
+
+        window.addEventListener('resize', scaleContent);
+        window.addEventListener('load', scaleContent);
+    </script>
+
+    <!-- Your existing JavaScript code -->
+    <script type="text/javascript" src="/javascripts/loadactivity.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var duration = 15; // 30 seconds
+            var display = document.querySelector('#time');
+            var userID = '{{ userID }}';
+            var questionNumber = '{{ questionNumber }}';
+            var timeExpired = false;
+
+            startTimer(duration, display);
+
+            document.getElementById('subForm').onsubmit = function(event) {
+                var timeLeft = document.getElementById("time").innerHTML;
+                timeLeft = 15 - parseInt(timeLeft.split(':')[1]); // Calculate time taken
+                document.getElementById('timeTaken').value = timeLeft; // Set hidden input value
+                document.getElementById('timeExpired').value = timeExpired;
+
+                const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+                if (!selectedAnswer) {
+                    event.preventDefault();
+                    alert('Please select an option before submitting.');
+                    return false;
+                }
+                document.getElementById('selectedAnswer').value = selectedAnswer.value;
+            };
+
+            function startTimer(duration, display) {
+                var timer = duration, minutes, seconds;
+                const interval = setInterval(function () {
+                    minutes = parseInt(timer / 60, 10);
+                    seconds = parseInt(timer % 60, 10);
+
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                    display.textContent = minutes + ":" + seconds;
+
+                    if (--timer < 0) {
+                        timeExpired = true;
+                        display.textContent = "00:00";
+                        document.getElementById('timeup-message').style.display = 'block';
+                        document.getElementById('img2find').classList.add('hidden');
+                        clearInterval(interval);
+                    }
+                }, 1000);
+            }
+
+            const toggleButtons = document.querySelectorAll('.btn-group-toggle .btn');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    toggleButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

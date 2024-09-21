@@ -1,0 +1,214 @@
+/* Reset margins and paddings for the entire document */
+/* (Already included in the HTML <style> tag) */
+
+/* Typography */
+body {
+    font-size: 16px; /* Base font size */
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Heading */
+h1 {
+    color: #333333;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+/* Paragraph */
+p {
+    color: #1a1919;
+    font-size: 1.25em;
+    line-height: 1.5;
+}
+
+/* Links */
+a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 1.25em;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Strong text */
+strong {
+    font-size: 1.2em;
+    color: #000000;
+}
+
+/* Forms */
+form {
+    margin-top: 20px;
+}
+
+/* Input range */
+input[type="range"] {
+    width: 100%;
+    margin: 10px 0;
+}
+
+/* Buttons */
+button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 1.25em;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Success button */
+.btn-success {
+    background-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+/* Primary button */
+.btn-primary {
+    width: auto;
+    padding: 15px 30px;
+}
+
+/* Large button */
+.btn-lg {
+    font-size: 1.5em;
+}
+
+/* Margin utility */
+.m-2 {
+    margin: 10px;
+}
+
+/* Image container */
+.image-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow images to wrap */
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto;
+    margin: 10px;
+}
+
+/* Radio group */
+.radio-group {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap */
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+}
+
+.radio-item {
+    text-align: center;
+    flex: 1 1 30%; /* Adjust item width for responsiveness */
+    position: relative;
+    margin-bottom: 20px; /* Space between items */
+}
+
+.radio-item input {
+    display: block;
+    margin: 0 auto;
+}
+
+.radio-label-number {
+    display: block;
+    margin-top: 5px;
+    font-size: 1.2rem;
+}
+
+.radio-label-text {
+    display: block;
+    margin-top: 5px;
+    font-size: 1rem;
+}
+
+.radio-label-left,
+.radio-label-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    font-size: 1rem;
+}
+
+.radio-label-left {
+    left: -10%;
+}
+
+.radio-label-right {
+    right: -10%;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+    .radio-label-left {
+        left: -15%;
+    }
+    .radio-label-right {
+        right: -15%;
+    }
+}
+
+@media (max-width: 480px) {
+    .radio-group {
+        flex-direction: column;
+        align-items: center;
+    }
+    .radio-label-left,
+    .radio-label-right {
+        position: static;
+        transform: none;
+        margin-top: 10px;
+    }
+}
+
+/* Text container */
+.textContainer {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.textContainer h1 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.textContainer p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.textContainer a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.textContainer a:hover {
+    text-decoration: underline;
+}

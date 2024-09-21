@@ -1,0 +1,121 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    font-size: large;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 800px;
+    width: 100%;
+    margin-top: 40px; /* Adjust this value to move the container further down or up */
+}
+
+h1 {
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+p {
+    color: #666666;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+strong {
+    font-size: 18px;
+    color: #000000;
+}
+
+/* Form Styles */
+form {
+    margin-top: 20px;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin: 10px 0;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.btn-success {
+    background-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-primary {
+    width: auto;
+    padding: 10px 20px;
+}
+
+.btn-lg {
+    font-size: 18px;
+}
+
+.m-2 {
+    margin: 10px;
+}
+
+.btn-human {
+    background-color: #b0c4de; /* Light Steel Blue */
+    border: 1px solid #8aa8c4; /* Steel Blue Border */
+    color: #000000; /* Black text */
+    flex: 1; /* Make buttons take equal space */
+    margin: 0 5px; /* Add some margin between buttons */
+}
+.btn-human:hover {
+    background-color: #a1b8d5; /* Slightly darker on hover */
+}
+.btn-machine {
+    background-color: #d3d3d3; /* Light Gray */
+    border: 1px solid #a9a9a9; /* Dark Gray Border */
+    color: #000000; /* Black text */
+    flex: 1; /* Make buttons take equal space */
+    margin: 0 5px; /* Add some margin between buttons */
+}
+.btn-machine:hover {
+    background-color: #bfbfbf; /* Slightly darker on hover */
+}
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

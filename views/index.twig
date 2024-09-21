@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Consent Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .forbiddenP {
+            text-align: center;
+             background-color: #fcf8e3;
+             border-color: #faf2cc;
+             color: #8a6d3b;
+             padding: .75rem 1.25rem;
+             margin-bottom: 1rem;
+             border: 1px solid transparent;
+             border-radius: 1.25rem;
+}
+
+        .embed-container {
+            width: 100%;
+            height: 60vh; /* Adjust height as needed */
+            border: none;
+        }
+        .consent-container {
+            margin-top: 20px;
+        }
+
+        body{
+            font-size: x-large;
+        }
+
+#pdfContainer {
+    width: 100%;
+    height: 3350px; /* Adjust height dynamically based on viewport height */
+    border: 1px solid #ddd; /* Light border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border-radius: 8px; /* Rounded corners */
+    overflow-y: auto; /* Scrollable content */
+    padding: 20px; /* Padding inside the container */
+    background-color: #fff; /* White background */
+}
+
+#pdfContainer h1 {
+    font-size: 24px; /* Larger headings */
+    margin-bottom: 10px; /* Space below headings */
+}
+
+#pdfContainer p {
+    font-size: 16px; /* Larger text */
+    line-height: 1.6; /* Increased line spacing */
+    margin-bottom: 15px; /* Space below paragraphs */
+}
+
+#pdfContainer a {
+    color: #007bff; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+
+#pdfContainer a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+#pdfContainer ul {
+    list-style-type: disc; /* Bullet points */
+    margin-left: 20px; /* Indent list */
+}
+
+#pdfContainer ol {
+    list-style-type: decimal; /* Numbered list */
+    margin-left: 20px; /* Indent list */
+}
+
+    </style>
+<style type="text/css"> * {margin:0; padding:0; text-indent:0; }
+ .s1 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 12pt; }
+ .s2 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 12pt; }
+ h1 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: underline; font-size: 12pt; }
+ .p, p { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 12pt; margin:0pt; }
+ .s5 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 9.5pt; }
+ .s7 { color: #00F; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 12pt; }
+ a { color: #1154CC; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: underline; font-size: 12pt; }
+ li {display: block; }
+ #l1 {padding-left: 0pt;counter-reset: c1 1; }
+ #l1> li>*:first-child:before {counter-increment: c1; content: counter(c1, decimal)". "; color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 12pt; }
+ #l1> li:first-child>*:first-child:before {counter-increment: c1 0;  }
+</style>
+</head>
+<body>
+<div class="container consent-container text-center">
+    <h1>Consent Form</h1>
+    <p class="lead">Please read the consent form below. After reading, confirm your agreement to proceed.</p>
+    <form action="/consent" method="post">
+        <div class="mb-4" id="pdfContainer">
+        <body><p class="s1" style="padding-top: 5pt;padding-left: 5pt;text-indent: 0pt;text-align: left;">Title of Study: Automation and Decision Making Optimization Study: eIRB # 27161</p><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;"><a href="mailto:colleen_patton@ncsu.edu" class="s2" target="_blank">Principal Investigator(s): Dr. Colleen Patton, </a><a href="mailto:arescobe@ncsu.edu" class="s2" target="_blank">colleen_patton@ncsu.edu ; Adolfo Escobedo, arescobe@ncsu.edu</a></p><p style="padding-top: 3pt;text-indent: 0pt;text-align: left;"><br/></p><p style="padding-left: 5pt;text-indent: 0pt;line-height: 1pt;text-align: left;"/><h1 style="padding-top: 13pt;padding-left: 5pt;text-indent: 0pt;text-align: left;">What are some general things you should know about research studies?</h1><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">You are invited to take part in a research study<i>. </i>Your participation in this study is voluntary. You have the right to be a part of this study, to choose not to participate, and to stop participating at any time without penalty. The purpose of this research study is to gain a better understanding of how people choose types of advice that are offered to them. We will use this knowledge to improve decision making and estimates of human operators.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Specific details about the research in which you are invited to participate are contained below. If you do not understand something in this form, please ask the researcher for clarification or more information. If you would like a printed copy, please let the researcher know before leaving the lab space. If, at any time, you have questions about your participation in this research, do not hesitate to contact the researcher(s) named above or the NC State IRB office. The IRB office’s contact information is listed in the <u><i>What if you have questions about your rights as a research participant?</i></u><i> </i>section of this form.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><h1 style="padding-left: 5pt;text-indent: 0pt;text-align: left;">What is the purpose of this study?</h1><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">The purpose of the study is to understand how people make decisions about advice from humans and automation.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><h1 style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Am I eligible to be a participant in this study?</h1><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">There will be approximately 100 participants in this study.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">To be a participant in this study, you must agree to be in the study, be over 18 years of age, and have normal or corrected-to-normal vision.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">You cannot participate in this study if you do not want to be in the study, are under 18, do not have normal vision, or are colorblind.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><h1 style="padding-left: 5pt;text-indent: 0pt;text-align: left;">What will happen if you take part in the study?</h1><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">If you agree to participate in this study, you will be asked to do all of the following:</p><ol id="l1"><li data-list-text="1."><p style="padding-left: 41pt;text-indent: -18pt;text-align: left;">Complete surveys about your performance, the automation’s performance, and your feelings toward the automation.</p></li><li data-list-text="2."><p style="padding-left: 41pt;text-indent: -18pt;text-align: left;">Classify abstract images by specfied criteria.</p></li></ol><p style="text-indent: 0pt;text-align: left;"><br/></p><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">The total amount of time that you will be participating in this study is around 30 minutes.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><h1 style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Recording and images</h1><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">No images or audio will be recorded. You do not need to agree to be recorded to participate in this research.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><h1 style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Risks and benefits</h1><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">There are minimal risks associated with your participation in this research. As with all research, there is a chance that confidentiality could be compromised; however, we are taking precautions to minimize this risk such as storing data on a password-protected server.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">There are no direct benefits to your participation in the research. The indirect benefits are that your data will help us to develop a better understanding of automation use.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><h1 style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Right to withdraw your participation</h1><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">You can stop participating in this study at any time for any reason. To stop your participation, please contact let your research assistant know immediately. If you choose to withdraw your consent and to stop participating in this research, you can expect that the researcher(s) will redact your data from their data set, securely destroy your data, and prevent future uses of your data for research purposes wherever possible. This is possible in some, but not all, cases.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><h1 style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Confidentiality, personal privacy, and data management</h1><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Trust is the foundation of the participant/researcher relationship. Much of that principle of trust is tied to keeping your information private and in the manner that we have described to you in this form. The information that you share with us will be held in confidence to the fullest extent allowed by law.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Protecting your privacy as related to this research is of utmost importance to us. There are very rare circumstances related to confidentiality where we may have to share information about you. Your information collected in this research study could be reviewed by representatives of the University for purposes such as quality control or safety.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">How we manage, protect, and share your data are the principal ways that we protect your personal privacy. Data that will be shared with others about you will be de-identified.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><p class="s1" style="padding-left: 41pt;text-indent: 0pt;text-align: left;">De-identified<span class="p">. De-identified data is information that at one time could directly identify you, but that we have recorded this data so that your identity is separated from the data. We do not have a master list with your code and real name that connects your information to the research data. When the research concludes, there will be no way your real identity will be linked to the data we publish.</span></p><p style="text-indent: 0pt;text-align: left;"><br/></p><h1 style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Future use of your research data</h1><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">To help maximize the benefits of your participation in this project, by further contributing to science and our community, your survey responses and behavioral data from the simulation will be stored for future research and may be shared with other people without additional consent from you.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><h1 style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Compensation</h1><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">For your participation in the full study, you will receive 6 dollars per half hour of participation. If you withdraw from the study prior to its completion, you will not receive compensation.</p><p style="padding-top: 5pt;text-indent: 0pt;text-align: left;"><br/></p><h1 style="padding-left: 5pt;text-indent: 0pt;text-align: left;">What if you have questions about this study?</h1><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;"><a href="mailto:colleen_patton@ncsu.edu" style=" color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 12pt;" target="_blank">If you have questions at any time about the study itself or the procedures implemented in this study, you may contact the researcher, Dr. Colleen Patton, </a><span style=" color: #00F; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: underline; font-size: 12pt;">colleen_patton@ncsu.edu</span>, 919-515-1721 or ask your research assistant.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><h1 style="padding-left: 5pt;text-indent: 0pt;text-align: left;">What if you have questions about your rights as a research participant?</h1><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">If you have questions about your rights as a participant or are concerned with your treatment throughout the research process, please contact the NC State University IRB Director at</p><p class="s7" style="padding-left: 5pt;text-indent: 0pt;text-align: left;"><span style=" color: #00F; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: underline; font-size: 12pt;">IRB-Director@ncsu.edu</span><a href="https://research.ncsu.edu/administration/compliance/research-compliance/irb/irb-forms-and-templates/participant-concern-and-complaint-form/" style=" color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 12pt;" target="_blank">, 919-515-8754, or </a><span style=" color: #00F; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: underline; font-size: 12pt;">fill out a confidential form online</span> <a href="https://research.ncsu.edu/administration/compliance/research-compliance/irb/irb-forms-and-templates/participant-concern-and-complaint-form/" style=" color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 12pt;" target="_blank">at </a><a href="https://research.ncsu.edu/administration/compliance/research-compliance/irb/irb-forms-and-templates/participant-concern-and-complaint-form/" target="_blank">https://research.ncsu.edu/administration/compliance/research-compliance/irb/irb-forms-and-templates</a></p><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;"><a href="https://research.ncsu.edu/administration/compliance/research-compliance/irb/irb-forms-and-templates/participant-concern-and-complaint-form/">/participant-concern-and-complaint-form/</a></p><p style="text-indent: 0pt;text-align: left;"><br/></p><h1 style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Consent To Participate</h1><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">By completing this consent form electronically, I am affirming that I have read and understand the above information. All of the questions that I had about this research have been answered. I have chosen to participate in this study with the understanding that I may stop participating at any time without penalty or loss of benefits to which I am otherwise entitled. I am aware that I may revoke my consent at any time.</p><p style="text-indent: 0pt;text-align: left;"><br/></p><p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">If you consent to participate in this research study, please click “Yes I consent” button to see the experiment.</p></body>
+        </div>
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="consentAgreement" name="consentAgreement" required>
+            <label class="form-check-label" for="consentAgreement">
+                I have read and agree to the consent form.
+            </label>
+        </div>
+        <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" id="notNCSUEmployee" name="notNCSUEmployee" required>
+            <label class="form-check-label" for="notNCSUEmployee">
+                I am not an employee of North Carolina State University.
+            </label>
+        </div>
+        <p class="forbiddenP"><strong>If you do not agree to the consent form or are an employee of NCSU, please exit this page.</strong></p>
+        <button type="submit" class="btn btn-primary" id="submitButton">Agree and Continue</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var pdfContainer = document.getElementById('pdfContainer');
+        var submitButton = document.getElementById('submitButton');
+
+        pdfContainer.addEventListener('scroll', function() {
+            if (pdfContainer.scrollTop + pdfContainer.clientHeight >= pdfContainer.scrollHeight) {
+                submitButton.disabled = false;
+            }
+        });
+    });
+</script>
+</body>
+</html>

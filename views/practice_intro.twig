@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Practice Round</title>
+    <!-- Include the viewport meta tag for responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Include Bootstrap CSS (optional) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Include your custom CSS -->
+    <link rel="stylesheet" href="/stylesheets/practice_intro.css">
+    <!-- Additional CSS styles -->
+    <style>
+        /* Reset margins and paddings for the entire document */
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        /* Wrapper for the entire content */
+        #complete {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Container that will be scaled */
+        #scaling-container {
+            width: 1920px; /* Set this to your content's original width */
+            height: 900px; /* Set this to your content's original height */
+        }
+
+        /* Ensure your content fits within the scaling container */
+        .container {
+            width: 100%;
+            height: 100%;
+            /* Remove any absolute positioning or fixed sizes */
+            /* Your existing styles */
+        }
+
+        /* Your existing CSS styles go below or ensure they're correctly linked */
+    </style>
+</head>
+<body>
+    <div id="complete">
+        <div id="scaling-container">
+            <!-- Your existing content -->
+            <div class="container text-center mt-4">
+                <!-- Welcome message -->
+                <h1>Welcome, {{ userID }}</h1>
+                <p>
+                    You are about to start the practice round. The interface will look like this:
+                </p>
+                <!-- Image container using Bootstrap grid -->
+                <div class="row justify-content-center">
+                    <div class="col-md-6 mb-3">
+                        <img src="images/templatephoto.png" alt="Template Image" class="img-fluid">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <img src="images/templatephoto2.png" alt="Template Image 2" class="img-fluid">
+                    </div>
+                </div>
+                <!-- Note -->
+                <p>
+                    <span class="text-danger font-weight-bold">NOTE:</span> The target image may be any color, rotated in any direction, and may be partially off the screen.
+                </p>
+                <!-- Instructions -->
+                <p>
+                    You will determine whether or not you believe the target image is in the photo. To assist learning, you will be able to check to see if you are correct or not before moving on.
+                </p>
+                <p>
+                    It is important that you learn to identify the image for later exercises. Please click the button below to proceed.
+                </p>
+                <!-- Start button -->
+                <form action="/activity" method="POST">
+                    <input type="hidden" name="userID" value="{{ userID }}">
+                    <button type="submit" class="btn btn-primary btn-lg">Start Practice Round</button>
+                </form>
+            </div>
+            <!-- End of your content -->
+        </div>
+    </div>
+
+    <!-- JavaScript to handle scaling -->
+    <script>
+        function scaleContent() {
+            var scalingContainer = document.getElementById('scaling-container');
+            var designWidth = 1920;  // Set this to your content's original width
+            var designHeight = 1080; // Set this to your content's original height
+
+            var windowWidth = window.innerWidth;
+            var windowHeight = window.innerHeight;
+
+            var scaleX = windowWidth / designWidth;
+            var scaleY = windowHeight / designHeight;
+
+            var scale = Math.min(scaleX, scaleY);
+
+            scalingContainer.style.transform = 'scale(' + scale + ')';
+            scalingContainer.style.transformOrigin = 'top left';
+
+            // Center the content within the viewport
+            scalingContainer.style.position = 'absolute';
+            scalingContainer.style.left = '50%';
+            scalingContainer.style.top = '50%';
+            scalingContainer.style.transform += ' translate(-50%, -50%)';
+        }
+
+        window.addEventListener('resize', scaleContent);
+        window.addEventListener('load', scaleContent);
+    </script>
+</body>
+</html>

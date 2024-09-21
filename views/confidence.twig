@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confidence Assessment</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/confidence.css">
+</head>
+<body>
+    <div class="container text-center mt-4">
+        <h1>Confidence Assessment</h1>
+        <form id="confidenceForm" action="{{ nextRoute }}" method="post">
+            <label for="confidence">Please rate your confidence in your answers <strong>in the previous block of questions:</strong></label>
+            <div class="radio-group">
+                <div class="radio-item">
+                    <span class="radio-label-left">Not sure any were correct</span>
+                    <input type="radio" name="confidence" value="0" required>
+                    <span class="radio-label-number">1</span>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" name="confidence" value="2">
+                    <span class="radio-label-number">2</span>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" name="confidence" value="3">
+                    <span class="radio-label-number">3</span>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" name="confidence" value="4">
+                    <span class="radio-label-number">4</span>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" name="confidence" value="5">
+                    <span class="radio-label-number">5</span>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" name="confidence" value="6">
+                    <span class="radio-label-number">6</span>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" name="confidence" value="7">
+                    <span class="radio-label-number">7</span>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" name="confidence" value="8">
+                    <span class="radio-label-number">8</span>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" name="confidence" value="9">
+                    <span class="radio-label-number">9</span>
+                </div>
+                <div class="radio-item">
+                    <span class="radio-label-right">Confident all were correct</span>
+                    <input type="radio" name="confidence" value="10">
+                    <span class="radio-label-number">10</span>
+                </div>
+            </div><br>
+
+            <div id="additionalQuestions" style="display: none;">
+                <div class="form-group mt-3">
+                    <label for="useRecommendation">How often did you use the recommendation to inform your final decision?</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <span class="radio-label-left">Not at all</span>
+                            <input type="radio" name="useRecommendation" value="1">
+                            <span class="radio-label-number">1</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="useRecommendation" value="2">
+                            <span class="radio-label-number">2</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="useRecommendation" value="3">
+                            <span class="radio-label-number">3</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="useRecommendation" value="4">
+                            <span class="radio-label-number">4</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="useRecommendation" value="5">
+                            <span class="radio-label-number">5</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="useRecommendation" value="6">
+                            <span class="radio-label-number">6</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="useRecommendation" value="7">
+                            <span class="radio-label-number">7</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="useRecommendation" value="8">
+                            <span class="radio-label-number">8</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="useRecommendation" value="9">
+                            <span class="radio-label-number">9</span>
+                        </div>
+                        <div class="radio-item">
+                            <span class="radio-label-right">Considered it strongly</span>
+                            <input type="radio" name="useRecommendation" value="10">
+                            <span class="radio-label-number">10</span>
+                        </div>
+                    </div><br>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="reliability">How reliable do you think the assistive system was?</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <span class="radio-label-left">Not at all reliable</span>
+                            <input type="radio" name="reliability" value="1">
+                            <span class="radio-label-number">1</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="reliability" value="2">
+                            <span class="radio-label-number">2</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="reliability" value="3">
+                            <span class="radio-label-number">3</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="reliability" value="4">
+                            <span class="radio-label-number">4</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="reliability" value="5">
+                            <span class="radio-label-number">5</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="reliability" value="6">
+                            <span class="radio-label-number">6</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="reliability" value="7">
+                            <span class="radio-label-number">7</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="reliability" value="8">
+                            <span class="radio-label-number">8</span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="reliability" value="9">
+                            <span class="radio-label-number">9</span>
+                        </div>
+                        <div class="radio-item">
+                            <span class="radio-label-right">Highly reliable</span>
+                            <input type="radio" name="reliability" value="10">
+                            <span class="radio-label-number">10</span>
+                        </div>
+                    </div><br>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="choiceReason" id="choiceReasonLabel"></label>
+                    <textarea class="form-control" id="choiceReason" name="choiceReason" rows="3" placeholder="Type here."></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success mt-3" disabled>Submit Confidence</button>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const isPracticeRound = {{ isPracticeRound }};
+            const chosenAssistance = "{{ chosenAssistance }}";
+            const unselectedAssistance = "{{ unselectedAssistance }}"; // Added variable for unselected assistance
+            const additionalQuestions = document.getElementById('additionalQuestions');
+            const choiceReasonLabel = document.getElementById('choiceReasonLabel');
+            const choiceReason = document.getElementById('choiceReason');
+            let counter = 0;
+
+            if (!isPracticeRound) {
+                additionalQuestions.style.display = 'block';
+                choiceReasonLabel.innerText = `You chose "${chosenAssistance}" over "${unselectedAssistance}." Why did you choose "${chosenAssistance}?"`; // Dynamic question
+                choiceReason.removeAttribute('required');
+            } else {
+                choiceReason.removeAttribute('required');
+                document.querySelectorAll('[name="useRecommendation"]').forEach(input => input.removeAttribute('required'));
+                document.querySelectorAll('[name="reliability"]').forEach(input => input.removeAttribute('required'));
+            }
+
+            const submitButton = document.querySelector('button[type="submit"]');
+
+            function incrementCounter() {
+                if (this.getAttribute('data-incremented') !== 'true') {
+                    counter++;
+                    this.setAttribute('data-incremented', 'true');
+                }
+                if ((isPracticeRound && counter === 1) || (!isPracticeRound && counter === 3)) {
+                    submitButton.disabled = false;
+                }
+            }
+
+            document.querySelectorAll('.radio-item input').forEach(input => {
+                input.addEventListener('change', incrementCounter);
+            });
+
+            document.getElementById('confidenceForm').addEventListener('submit', function(event) {
+                if ((isPracticeRound && counter < 1) || (!isPracticeRound && counter < 3)) {
+                    event.preventDefault();
+                    alert('Please complete all fields before submitting the form.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Assistance</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/interface.css">
+</head>
+<body>
+<div class="container text-center mt-4">
+    <h1>Select Assistance</h1>
+    <form id="assistanceForm" action="/activity/{{ userID }}/select_assistance" method="post">
+        <input type="hidden" name="iteration" value="{{ iteration }}">
+        <input type="hidden" id="timeTaken" name="timeTaken" value="">
+        <div id="buttonsContainer" class="buttons-container">
+            <button type="submit" name="selectedOption" value="dssOption1" class="btn btn-human btn-lg m-2">
+                Human Assistance: {{ option1.expertise | capitalize }}
+            </button>
+            <button type="submit" name="selectedOption" value="dssOption2" class="btn btn-machine btn-lg m-2">
+                Machine Assistance: {{ option2.expertise | capitalize }}
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('buttonsContainer');
+        const buttons = Array.from(container.children);
+        if (Math.random() > 0.5) {
+            buttons.reverse();
+        }
+        container.innerHTML = '';
+        buttons.forEach(button => container.appendChild(button));
+
+        const startTime = Date.now();
+
+        const form = document.getElementById('assistanceForm');
+        form.addEventListener('submit', function() {
+            const endTime = Date.now();
+            const timeTaken = ((endTime - startTime) / 1000).toFixed(2); // Time taken in seconds
+            document.getElementById('timeTaken').value = timeTaken;
+        });
+    });
+</script>
+</body>
+</html>

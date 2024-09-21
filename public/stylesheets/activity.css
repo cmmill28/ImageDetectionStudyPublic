@@ -1,0 +1,156 @@
+body {
+    font-size: 24px;
+}
+
+/* Style the Image */
+#myImg {
+    padding-top: 30px;
+    width: 100%; /* Make the image large */
+    max-width: 1000px; /* Adjust max-width as needed */
+    transition: 0.3s;
+}
+
+#myImg:hover {
+    opacity: 0.7;
+}
+
+.btn-secondary.active, .btn-secondary:active {
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
+    color: white;
+}
+
+.large-image {
+    width: 100%; /* Use full width of the container */
+    max-width: 1000px; /* Adjust max-width as needed */
+    height: auto;
+}
+
+.content-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start; /* Align items to the top */
+}
+
+.mainContainer {
+    flex: 2;
+    padding-right: 20px;
+    background-color: #F5F5F5;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 1.25rem;
+    width: 60%; /* Adjust width to create more space for text-container */
+    position: relative;
+}
+
+.image-container {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image-container {
+    position: relative; /* For easy absolute positioning if needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container img.hidden {
+    visibility: hidden; /* Hide the image but keep the container size */
+}
+
+.text-container {
+    flex: 1;
+    align-self: flex-start; /* Align to the top */
+    margin-left: 1rem; /* Add some margin to separate it from the image container */
+}
+
+.info-text {
+    border: 1px solid #ccc; /* Add a border to the text box */
+    padding: 10px; /* Add some padding */
+    color: black;
+    margin-left: 10px;
+}
+
+.answeractivity {
+    margin-top: 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btn-group-toggle {
+    margin-bottom: 1rem;
+}
+
+#timeup-message {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    color: red;
+}
+
+#submitButton {
+    font-size: 2.5rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#checkButton{
+    font-size: 2rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#submitButton:hover{
+    cursor: pointer;
+}
+
+.btn-group-toggle label {
+    font-size: 1.5rem;
+}
+
+.text-and-answer-container {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.text-container, .answeractivity {
+    width: 100%;
+    margin: 10px 0;
+}
+
+#feedbackText {
+    white-space: pre-line;
+}
+
+/* Media Queries for Smaller Screens */
+@media (max-width: 768px) {
+    body {
+        font-size: 2vw;
+    }
+
+    .large-image {
+        max-width: 60vw;
+    }
+
+    #submitButton {
+        font-size: 3vw;
+    }
+
+    .btn-group-toggle label {
+        font-size: 2.5vw;
+    }
+}
