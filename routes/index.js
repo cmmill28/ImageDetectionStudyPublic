@@ -1,4 +1,5 @@
 var express = require('express');
+const seedrandom = require('seedrandom');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 const co = require('co');
@@ -21,60 +22,6 @@ MongoClient.connect(url, { useUnifiedTopology: true })
         console.error('Database connection failed:', error);
     });
 
-// Get user instance function
-let getUserInstance = uid => users.find(user => user.id === uid);
-
-// Function to check if a group contains no more than 2 incorrect recommendations
-function hasTooManyIncorrect(images) {
-    const incorrectAIImages = [
-        "Image4.png", "Image5.png", "Image17.png", "Image28.png", "Image36.png", 
-        "Image46.png", "Image52.png"
-    ];
-
-    const incorrectCrowdImages = [
-        "Image4.png", "Image10.png", "Image20.png", "Image22.png", "Image41.png", "Image51.png", "Image56.png"
-    ];
-
-    const incorrectCount = images.filter(img => {
-        const aiIncorrect = incorrectAIImages.includes(img.filename);
-        const crowdIncorrect = incorrectCrowdImages.includes(img.filename);
-
-        // Check if either AI or Crowd has made an incorrect recommendation
-        return aiIncorrect || crowdIncorrect;
-    }).length;
-
-    if (incorrectCount > 2) {
-        console.warn(`Too many incorrect images: ${incorrectCount}.`);
-    }
-
-    return incorrectCount > 2;
-}
-
-function selectImageSetWithRetries(images, maxRetries = 10) {
-    let attempts = 0;
-    let selectedImages;
-    
-    do {
-        selectedImages = images.slice(0, 6);  // Select the first 6 images (post shuffle)
-        attempts++;
-    } while (hasTooManyIncorrect(selectedImages) && attempts < maxRetries);
-    
-    if (attempts === maxRetries) {
-        console.warn('Max retries reached, using the last selected set even if it has too many incorrect images.');
-    }
-    
-    return selectedImages;
-}
-
-// Function to shuffle an array
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
 // Decision Support Options
 const decisionSupportOptions = [
     { type: 'human', expertise: 'small' },
@@ -84,24 +31,6 @@ const decisionSupportOptions = [
     { type: 'machine', expertise: 'medium' },
     { type: 'machine', expertise: 'large' }
 ];
-
-// Generate human-machine combinations of decision support options
-function generateHumanMachineCombinations() {
-    const combinations = [];
-    const humanOptions = decisionSupportOptions.filter(option => option.type === 'human');
-    const machineOptions = decisionSupportOptions.filter(option => option.type === 'machine');
-    
-    humanOptions.forEach(humanOption => {
-        machineOptions.forEach(machineOption => {
-            combinations.push({
-                dssOption1: humanOption,
-                dssOption2: machineOption
-            });
-        });
-    });
-
-    return combinations;
-}
 
 // Initialize Images with Metadata for 60 images
 const images = [
@@ -191,6 +120,76 @@ const practiceQuestions = [
     { questionNumber: 14, correctAnswer: 'No', image: 'practice14.png', look:'not present' },
     { questionNumber: 15, correctAnswer: 'Yes', image: 'practice15.png', look:'top left' }
 ];
+// Global seed value to ensure consistency (you can set this to anything)
+const GLOBAL_SEED = "1234"; 
+
+// Function to shuffle an array using a seeded random number generator
+function shuffleArray(array, seed, trackOriginalOrder = false) {
+    const rng = seedrandom(seed);  // Initialize the random number generator with a seed
+    const originalIndices = array.map((_, index) => index);  // Track the original indices if needed
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));  // Use seeded randomness
+        [array[i], array[j]] = [array[j], array[i]];  // Swap elements
+        if (trackOriginalOrder) {
+            [originalIndices[i], originalIndices[j]] = [originalIndices[j], originalIndices[i]];  // Swap indices
+        }
+    }
+    return trackOriginalOrder ? { shuffledArray: array, originalIndices } : array;
+}
+
+// Get user instance function
+let getUserInstance = uid => users.find(user => user.id === uid);
+
+// Generate human-machine combinations of decision support options
+function generateHumanMachineCombinations() {
+    const combinations = [];
+    const humanOptions = decisionSupportOptions.filter(option => option.type === 'human');
+    const machineOptions = decisionSupportOptions.filter(option => option.type === 'machine');
+    
+    humanOptions.forEach(humanOption => {
+        machineOptions.forEach(machineOption => {
+            combinations.push({
+                dssOption1: humanOption,
+                dssOption2: machineOption
+            });
+        });
+    });
+
+    return combinations;
+}
+
+// Global DSS-to-image set mapping
+let globalDSSImageSetMapping = null;
+
+// Initialize DSS and image sets once for all users, using seeded randomness
+function initializeGlobalDSSImageSetMapping() {
+    const shuffledImages = shuffleArray([...images], `${GLOBAL_SEED}-images`);
+
+    const imageSets = [];
+    for (let i = 0; i < 9; i++) {
+        imageSets.push(shuffledImages.slice(i * 6, (i + 1) * 6));
+    }
+
+    const shuffledDSSCombinations = shuffleArray(generateHumanMachineCombinations(), `${GLOBAL_SEED}-dss`);
+
+    globalDSSImageSetMapping = shuffledDSSCombinations.map((dssCombination, index) => ({
+        dssCombination: dssCombination,
+        imageSet: imageSets[index]
+    }));
+
+    console.log("Global DSS to Image Set Mapping Created:", globalDSSImageSetMapping);
+}
+
+// Function to shuffle the order of imagesG within each set for a user, using a seed for per-user randomness
+function shuffleImageSetsForUser(userID) {
+    // Shuffle the DSS-to-image set mapping for each user
+    const shuffledMapping = shuffleArray([...globalDSSImageSetMapping], `${userID}-dss-order`);
+    
+    return shuffledMapping.map(mapping => ({
+        dssCombination: mapping.dssCombination,
+        imageSet: shuffleArray([...mapping.imageSet], `${Date.now()}-${userID}-set`)  // Shuffle order of images within the set for each user
+    }));
+}
 
 // Helper function to log activity to the database
 const logActivity = (db, collection, item) => {
@@ -202,39 +201,19 @@ const fetchUserRecord = (db, userID) => {
     return db.collection('users').findOne({ "user": userID });
 };
 
-// Function to initialize the user session
+// Initialize a new session for each user
 function initializeUserSession(userID, db) {
     return co(function* () {
-        const usersCol = db.collection('users');
-        const existingUser = yield usersCol.findOne({ user: userID });
+        const dbCollection = db.collection('users');
+        const existingUser = yield dbCollection.findOne({ user: userID });
 
-        if (existingUser) {
-            console.log(`Session already exists for user ${userID}`);
-            return existingUser;
-        } else {
-            const shuffledPracticeQuestions = shuffleArray([...practiceQuestions]);
-
-            // Shuffle all images globally before selecting sets
-            const shuffledImages = shuffleArray([...images]);
-
-            // Select 9 sets of 6 images after shuffling
-            const imageSets = [];
-            for (let i = 0; i < 9; i++) {
-                const selectedSet = selectImageSetWithRetries(shuffledImages.slice(i * 6, (i + 1) * 6));
-                imageSets.push(selectedSet);
+        if (!existingUser) {
+            if (!globalDSSImageSetMapping) {
+                initializeGlobalDSSImageSetMapping();  // Ensures global sets are created only once
             }
-
-            // Shuffle and assign DSS combinations
-            const combinations = shuffleArray(generateHumanMachineCombinations());
-            const userSession = [];
-
-            for (let i = 0; i < 9; i++) {
-                userSession.push({
-                    dssOption1: combinations[i].dssOption1,
-                    dssOption2: combinations[i].dssOption2,
-                    imageSet: imageSets[i] // Assign the selected image set
-                });
-            }
+            
+            const shuffledPracticeQuestions = shuffleArray([...practiceQuestions], `${userID}-practice`);
+            const userSession = shuffleImageSetsForUser(userID);  // Unique shuffle for this user
 
             const newUserSession = {
                 user: userID,
@@ -244,18 +223,28 @@ function initializeUserSession(userID, db) {
                 currentQuestionIndex: 0
             };
 
-            yield usersCol.insertOne(newUserSession);
+            yield dbCollection.insertOne(newUserSession);
             console.log(`Created new session for user ${userID}`);
 
             return newUserSession;
+        } else {
+            console.log(`Session already exists for user ${userID}`);
+            return existingUser;
         }
     });
+    
 }
+
+// If not already initialized, initialize the global DSS-image set mapping
+
+// Debugging: Log global DSS image set mapping
+console.log("Global DSS Image Set Mapping:", globalDSSImageSetMapping);
 
 // Get home page
 router.get('/', function (req, res, next) {
     res.render('index');
 });
+
 
 // Handle consent form submission
 router.post('/consent', [
@@ -492,8 +481,25 @@ const handleAssistanceSelectionAndActivity = (userID, res, db) => {
         }
 
         const options = userRecord.userSession[currentIteration];
-        const chosenOption = options.dssOption1; 
-        const unselectedOption = options.dssOption2; 
+
+        // Check if DSS combination exists
+        if (!options || !options.dssCombination) {
+            console.error('Invalid DSS combination:', options); // Debugging log
+            res.status(500).send('Internal Server Error: DSS combination is invalid.');
+            return;
+        }
+
+        const chosenOption = options.dssCombination.dssOption1;
+        const unselectedOption = options.dssCombination.dssOption2;
+
+        // Validate that both options have the 'type' property
+        if (!chosenOption.type || !unselectedOption.type) {
+            console.error('Chosen or unselected option is missing type:', chosenOption, unselectedOption); // Debugging log
+            res.status(500).send('Internal Server Error: Chosen or unselected option is missing type.');
+            return;
+        }
+
+        console.log(`User ${userID} selecting between:`, chosenOption, unselectedOption); // Debugging log
 
         // Save the chosen and unselected options to the user record
         yield db.collection('users').updateOne(
@@ -504,19 +510,21 @@ const handleAssistanceSelectionAndActivity = (userID, res, db) => {
                     unselectedAssistance: `${unselectedOption.type}: ${unselectedOption.expertise}`
                 }
             }
-        );    
+        );
 
         res.render('select_assistance', {
             userID: userID,
             iteration: currentIteration,
-            option1: options.dssOption1,
-            option2: options.dssOption2
+            option1: chosenOption,
+            option2: unselectedOption
         });
     }).catch(error => {
-        console.error('Error occurred while displaying assistance options:', error);
+        console.error('Error occurred while displaying assistance options:', error); // Debugging log
         res.status(500).send('Internal Server Error');
     });
 };
+
+
 
 // Route to display the assistance selection page
 router.get('/activity/:userID/select_assistance', function (req, res, next) {
@@ -524,25 +532,37 @@ router.get('/activity/:userID/select_assistance', function (req, res, next) {
     handleAssistanceSelectionAndActivity(userID, res, dbClient.db(datab));
 });
 
-// Route to handle assistance selection
 router.post('/activity/:userID/select_assistance', function (req, res, next) {
     const userID = sanitizeHtml(req.params.userID);
-    const selectedOption = req.body.selectedOption;
-    const timeTaken = parseFloat(req.body.timeTaken); // Get the time taken from the form
-
-    console.log(`Time taken received: ${timeTaken}`); // Debugging statement
+    const selectedOption = req.body.selectedOption;  // "dssOption1" or "dssOption2"
+    const timeTaken = parseFloat(req.body.timeTaken);  // Time taken to make the choice
 
     co(function* () {
         const db = dbClient.db(datab);
         const userRecord = yield fetchUserRecord(db, userID);
+
         if (!userRecord) {
             res.status(500).send('Internal Server Error: User record not found.');
             return;
         }
 
         const currentIteration = userRecord.currentIteration;
-        const chosenOption = userRecord.userSession[currentIteration][selectedOption];
-        const unselectedOption = selectedOption === "dssOption1" ? userRecord.userSession[currentIteration]["dssOption2"] : userRecord.userSession[currentIteration]["dssOption1"];
+        const userSession = userRecord.userSession[currentIteration];
+
+        // Ensure userSession and dssCombination are available and correctly structured
+        if (!userSession || !userSession.dssCombination) {
+            console.error('Invalid session structure:', userSession);
+            res.status(500).send('Internal Server Error: Invalid session structure.');
+            return;
+        }
+
+        const { dssOption1, dssOption2 } = userSession.dssCombination;
+
+        // Determine the chosen and unselected options
+        const chosenOption = selectedOption === 'dssOption1' ? dssOption1 : dssOption2;
+        const unselectedOption = selectedOption === 'dssOption1' ? dssOption2 : dssOption1;
+
+        // Validate the selected option
         if (!chosenOption || !chosenOption.type || !chosenOption.expertise) {
             console.error('Invalid chosen option:', chosenOption);
             res.status(500).send('Internal Server Error: Chosen option is invalid.');
@@ -555,12 +575,13 @@ router.post('/activity/:userID/select_assistance', function (req, res, next) {
             selectedOption: chosenOption,
             unselectedOption: unselectedOption,
             timestamp: new Date(),
-            timeTaken: isNaN(timeTaken) ? 0 : timeTaken // Ensure timeTaken is a valid number
+            timeTaken: isNaN(timeTaken) ? 0 : timeTaken  // Ensure timeTaken is valid
         };
 
+        // Log activity and update user session
         yield logActivity(db, 'assistance_selection', item);
 
-        // Initialize current question index for assisted round
+        // Update the user's selected and unselected options in the database
         yield db.collection('users').updateOne(
             { "user": userID },
             { $set: { "currentQuestionIndex": 0, "selectedOption": chosenOption, "unselectedOption": unselectedOption } }
@@ -568,10 +589,12 @@ router.post('/activity/:userID/select_assistance', function (req, res, next) {
 
         handleAssistedRound(userID, res, db);
     }).catch(error => {
-        console.error('Error occurred while handling assistance selection:', error);
+        console.error('Error occurred during assistance selection:', error);
         res.status(500).send('Internal Server Error');
     });
 });
+
+
 
 // Function to handle assisted round questions
 const handleAssistedRound = (userID, res, db) => {
