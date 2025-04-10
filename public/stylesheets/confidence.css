@@ -1,0 +1,240 @@
+body {
+    font-size: large;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 2000px;
+    width: 100%;
+    margin-top: 40px; 
+}
+
+h1 {
+    color: #333333;
+    margin-bottom: 20px;
+    font-size: 2em; 
+}
+
+p {
+    color: #1a1919;
+    font-size: 1.25em; 
+    line-height: 1.5;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 1.25em; 
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+strong {
+    font-size: 1.2em; 
+    color: #000000;
+}
+
+
+form {
+    margin-top: 20px;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin: 10px 0;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 1.25em; 
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.btn-success {
+    background-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-primary {
+    width: auto;
+    padding: 15px 30px;
+}
+
+.btn-lg {
+    font-size: 1.5em; 
+}
+
+.m-2 {
+    margin: 10px;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto;
+    margin: 0 10px;
+}
+
+.radio-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.radio-item {
+    text-align: center;
+    flex: 1;
+    position: relative;
+}
+.radio-item input {
+    display: block;
+    margin: 0 auto;
+}
+.radio-label-number {
+    display: block;
+    margin-top: 5px;
+    font-size: 1.2rem; /* Increased font size */
+}
+.radio-label-text {
+    display: block;
+    margin-top: 5px;
+    font-size: 1rem; /* Increased font size */
+}
+.radio-label-left {
+    position: absolute;
+    left: -185px; /* Move further left */
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap; /* Prevent wrapping */
+}
+.radio-label-right {
+    position: absolute;
+    right: -185px; /* Move further right */
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+.textContainer {
+    padding: 20px; /* Padding inside the container */
+    background-color: #f8f9fa; /* Light grey background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-bottom: 20px; /* Space below container */
+}
+.textContainer h1 {
+    font-size: 1.5rem; /* Larger headings */
+    margin-bottom: 10px; /* Space below headings */
+}
+.textContainer p {
+    font-size: 2rem; /* Larger text */
+    line-height: 1.6; /* Increased line spacing */
+    margin-bottom: 15px; /* Space below paragraphs */
+}
+.textContainer a {
+    color: #007bff; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+.textContainer a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+#dynamicText {
+    font-size: 1.25rem; /* Make it slightly smaller than the label */
+    color: black;
+    margin-top: 0px; /* Add some space between the label and the text */
+    margin-bottom: 16px; /* Add some space below the dynamic text */
+    font-style: bold; /* Optional: give it an italic style for a softer look */
+    text-align: center; /* Ensure the text aligns with the rest of the form */
+}
+
+.radio-label-title {
+    display: block; /* Ensures the label takes up a full line */
+    font-size: 1.25rem; /* Make it the same size as the dynamic text */
+    margin-bottom: 10px; /* Space below the label */
+    text-align: center; /* Align it to the left for clarity */
+}
+
+.radio-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Allows the items to wrap if the screen is small */
+    margin-top: 10px;
+}
+
+.radio-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px; /* Space between the radio buttons */
+}
+
+.radio-label-left {
+    font-size: 0.9rem; /* Smaller font size for the left label */
+    margin-right: 10px; /* Add spacing between the label and the radio button */
+}
+
+.radio-label-number {
+    margin-top: 5px; /* Add space between the radio button and the number */
+    font-size: 0.9rem;
+}
+
+.radio-label-right {
+    font-size: 0.9rem; /* Smaller font size for the right label */
+    margin-left: 10px; /* Add spacing to the right side */
+}
+
+@media (max-width: 768px) {
+    .radio-group {
+        flex-direction: column; /* Stack radio buttons vertically on small screens */
+        align-items: flex-start;
+    }
+
+    .radio-item {
+        margin-bottom: 10px; /* Add space between radio items on small screens */
+    }
+    #dynamicText {
+        font-size: 0.9rem; /* Make it slightly smaller on smaller screens */
+        margin-top: 6px;
+        margin-bottom: 12px;
+    }
+}

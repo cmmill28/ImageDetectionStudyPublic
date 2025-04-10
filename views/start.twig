@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Start</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Include necessary scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- Include custom styles -->
+    <link rel="stylesheet" href="/stylesheets/intro.css">
+</head>
+<body>
+    <div class="containerIntro">
+        <div class="float-left">
+            <div class="text-danger">{{ error }}</div>
+            <p class="forbiddenP"><strong>Go Fullscreen!</strong> Windows: F11 or Fn-F11 | Mac: Command-Control-F</p>
+
+            <!-- Introduction Section -->
+            <h1 class="py-4">Introduction</h1>
+            <p>Welcome to our study on <strong>Shape and Object Detection in Images.</strong> This study should take approximately 30 minutes to complete.</p>
+            <p>This study will ask you to perform different exercises related to object detection. For each question, you will be asked to determine if you believe a specified object is or isn't in an image. Sometimes, you will be presented with options for you to select a support system to assist you with the task; this system will provide a recommendation that you may choose to follow or ignore. From this study, we want to better understand participants' preference and utilization of these support systems.</p>
+
+            <!-- Task Section -->
+            <h1 class="py-2">Task</h1>
+            <p>
+                You will be assigned a number of exercises where you will be prompted to look for a specified object in an image. For each exercise, you will be asked to respond to the question: "Is this object in the image?"<br>
+                <br><strong>Below is an example photo that represents what you will see:</strong><br><br>
+            
+                <!-- Insert a screenshot of a trial here but with a photo that won’t appear in the real trials -->
+                <img src="images/templatephoto2.png" alt="Example Trial Image" style="display: block; margin: 0 auto; max-width: 60%; height: auto;">
+            </p>
+            <p>The target image may be any color, rotated in any direction, and may be partially off the screen.</p>
+            <p>
+                You will have 15 seconds to determine if the object is in the image and respond accordingly. If you are unable to determine if the image is present or not within the 15-second time frame, the image will disappear, and you will have to submit your best guess.
+            </p>
+            <p><span class="text-danger">NOTE:</span> Some questions are purposely challenging, and it may be difficult to answer the questions accurately. If you are unsure about a certain question, we ask that you please answer it to the best of your ability.</p>
+
+            <!-- Assisted Decisions Section -->
+            <h1 class="py-2">Assisted Decisions</h1>
+            <p>
+                Sometimes, you will have the choice between two decision support systems. You will be told a little bit of information about the two systems before you make your decision. Your goal is to choose a support system that you believe will help you perform best in the task, based on the knowledge that you have about the systems. Once you make a choice of a system, you will complete a few trials with that support and your decision cannot be changed until you finish that set of trials. <br><br>  You can see the recommendation from the automated aid in the box where it says "Recommendation: Target Present". This means the aid believes the bat object is in the image.
+            </p>
+            <p>
+                All of the decision aids are reasonably accurate, but they may make mistakes. They will provide a recommendation on whether or not the object is in the image, such as the example below. It is your job to decide if the recommendation is correct or incorrect, and provide the final answer on the presence of the object.
+            </p>
+            <!-- Insert a photo here of an image and the recommendation -->
+            <img src="images/Example.png" alt="Example Recommendation" style="display: block; margin: 0 auto; max-width: 60%; height: auto;">
+
+            <!-- Let's Begin Section -->
+            <h1 class="py-2">Let’s Begin!</h1>
+            <p>
+                Remember, your goal is to be as accurate as possible, and choose a decision support system that helps you do that. You will begin the experiment with a few practice trials to see how the program works. Then you will begin the real trials. Please do not leave your computer during the experiment. When you are ready to begin, press the start button below.
+            </p>
+
+            <!-- When Finished Section -->
+            <h1 class="py-2">When Finished...</h1>
+            <p>After you have finished all the questions, there is a Demographics Questionnaire. Please complete it. When you have completed the Demographics Questionnaire, a link will appear that will redirect you back to Prolific, please use this link in order to receive your compensation.</p>
+            <p class="forbiddenP"><strong>Please do not use the back/forward or refresh features of your browser as they may end your session and you may not be paid.</strong></p>
+
+            <!-- Input SONA ID Section -->
+            <p id="input-text">Please click “Start Study”</p>
+            <div class="footer4introduce">
+                <div class="text-danger">{{ error }}</div>
+                <form autocomplete="off" method="POST" action="/practice_intro">
+                    <button type="submit" class="btn btn-success" id="startStudyBtn">Start Study</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

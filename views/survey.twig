@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Study Demographic Survey</title>
+    <link rel="stylesheet" href="/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/survey.css">
+</head>
+<body>
+    <div class="d-flex justify-content-center py-2">UserID: <div name="userID" style="display:inline" id="userID">{{ userID }}</div></div>
+    <div class="demograpyPage">
+        <div class="intro">
+            <h1 class="d-flex justify-content-center">Post Study Demographic Survey</h1>
+            <p class="d-flex justify-content-center">
+                Please answer the following to the best of your ability.  
+                All answers will be kept confidential and will only be reported 
+                statistically (grouped with others’ responses).  
+            </p>
+        </div>
+        <form id="surveyForm" method="post" action="/submitSurvey" onsubmit="return validateForm()">
+            <input type="hidden" name="userID" value="{{ userID }}">
+            <div class="form-group">
+                <label for="age">What is your age (in years)?</label>
+                <input type="text" class="form-control" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label>What is your gender?</label>
+                <div class="radio-group">
+                    <div>
+                        <input type="radio" id="male" name="gender" value="Male" required>
+                        <label for="male">Male</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="female" name="gender" value="Female">
+                        <label for="female">Female</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="other" name="gender" value="Other">
+                        <label for="other">Other</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="genderPreferNot" name="gender" value="Prefer not to answer">
+                        <label for="genderPreferNot">Prefer not to answer</label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div id="surveyResult" hidden></div>
+        <h1 class="text-center" id="key2show"></h1>
+        <h1 class="text-success text-center" id="key"></h1>
+        <br><br>
+        <div id="debrief" class="text-center"></div>
+    </div>
+
+    <script src="/vendor/jquery.min.js"></script>
+    <script src="/vendor/popper.min.js"></script>
+    <script src="/vendor/bootstrap.min.js"></script>
+    <script src="/vendor/d3.v3.min.js"></script>
+    <script type="text/javascript" src="/javascripts/survey.js"></script>
+
+    <script>
+        const userID = '{{ userID }}';
+        console.log('UserID:', userID);
+        initializeSurvey(userID);
+
+        function validateForm() {
+            let valid = true;
+            const radioGroups = document.querySelectorAll('.radio-group');
+            radioGroups.forEach(group => {
+                const checked = group.querySelector('input[type="radio"]:checked');
+                if (!checked) {
+                    valid = false;
+                    group.classList.add('error');
+                } else {
+                    group.classList.remove('error');
+                }
+            });
+            const selects = document.querySelectorAll('select');
+            selects.forEach(select => {
+                if (!select.value) {
+                    valid = false;
+                    select.classList.add('error');
+                } else {
+                    select.classList.remove('error');
+                }
+            });
+
+            return valid;
+        }
+    </script>
+</body>
+</html>

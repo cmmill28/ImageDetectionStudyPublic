@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Break</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/stylesheets/intro.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h1 class="text-center my-4">Take a Break?</h1>
+                <p class="text-center">You have completed several rounds of the study. You may take a 2-minute break before proceeding. If you wish, you can click the button below to continue immediately.</p>
+                <div class="text-center my-4">
+                    <button id="continueBtn" class="btn btn-success">Continue</button>
+                </div>
+                <div id="timer" class="text-center my-4"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const continueBtn = document.getElementById('continueBtn');
+            const timer = document.getElementById('timer');
+            const nextIteration = '{{ nextIteration }}';
+            const userID = '{{ userID }}';
+
+            let countdown = 120; // 2 minutes
+
+            const updateTimer = () => {
+                const minutes = Math.floor(countdown / 60);
+                const seconds = countdown % 60;
+                timer.textContent = `Time left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                countdown--;
+                if (countdown >= 0) {
+                    setTimeout(updateTimer, 1000);
+                } else {
+                    window.location.href = `/activity/${userID}/select_assistance`;
+                }
+            };
+
+            continueBtn.addEventListener('click', function() {
+                window.location.href = `/activity/${userID}/select_assistance`;
+            });
+
+            updateTimer();
+        });
+    </script>
+</body>
+</html>

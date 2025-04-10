@@ -1,0 +1,203 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    font-size: large;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    max-width: 1000px;
+    width: 100%;
+    margin-top: 60px; /* Adjust this value to move the container further down or up */
+}
+
+h1 {
+    color: #333333;
+    margin-bottom: 30px;
+}
+
+p {
+    color: #666666;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+strong {
+    font-size: 18px;
+    color: #000000;
+}
+
+/* Form Styles */
+form {
+    margin-top: 20px;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin: 10px 0;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.btn-success {
+    background-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-primary {
+    width: auto;
+    padding: 10px 20px;
+}
+
+.btn-lg {
+    font-size: 1.5rem; /* Larger button text */
+    padding: 15px 25px; /* Increased padding */
+    margin: 0 10px; /* Increased margin between buttons */
+}
+
+.m-2 {
+    margin: 15px !important; /* Override bootstrap margin */
+}
+
+.btn-human {
+    background-color: #b0c4de; /* Light Steel Blue */
+    border: 1px solid #8aa8c4; /* Steel Blue Border */
+    color: #000000; /* Black text */
+    flex: 1; /* Make buttons take equal space */
+    margin: 0 5px; /* Add some margin between buttons */
+}
+.btn-human:hover {
+    background-color: #a1b8d5; /* Slightly darker on hover */
+}
+.btn-machine {
+    background-color: #d3d3d3; /* Light Gray */
+    border: 1px solid #a9a9a9; /* Dark Gray Border */
+    color: #000000; /* Black text */
+    flex: 1; /* Make buttons take equal space */
+    margin: 0 5px; /* Add some margin between buttons */
+}
+.btn-machine:hover {
+    background-color: #bfbfbf; /* Slightly darker on hover */
+}
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.assistance-btn {
+    border: none;
+    border-radius: 15px;
+    padding: 2rem;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+}
+
+.assistance-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        rgba(255, 255, 255, 0.15) 0%, 
+        rgba(255, 255, 255, 0) 100%);
+    z-index: 1;
+}
+
+.option-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.option-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.option-content p {
+    font-size: 1.25rem;
+    letter-spacing: 1px;
+}
+
+/* Color-specific hover effects */
+.human-btn:hover {
+    background-color: var(--human-color);
+    filter: brightness(1.1);
+}
+
+.machine-btn:hover {
+    background-color: var(--machine-color);
+    filter: brightness(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .button-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .assistance-btn {
+        min-height: 200px;
+        padding: 1.5rem;
+    }
+    
+    .option-content h2 {
+        font-size: 1.5rem;
+    }
+}
