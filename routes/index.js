@@ -639,37 +639,54 @@ router.get('/survey/:userID', (req, res) => {
 });
 
 // Process survey submission
-router.post('/submitSurvey', [
-  body('age').isInt({ min: 18, max: 100 }),
-  body('gender').isIn(['male', 'female', 'non-binary', 'prefer-not']),
-  body('education').isIn(['hs', 'college', 'grad', 'other']),
-  body('vision').isIn(['normal', 'corrected', 'impaired'])
-], async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).render('survey', { 
-      error: 'Invalid survey data',
-      userID: req.body.userID
-    });
-  }
+// Route to submit survey data
+router.post(
+  '/submitSurvey',
+  [
+    body('age')
+      .notEmpty().withMessage('Age is required')
+      .isInt({ min: 0, max: 120 }).withMessage('Age must be a number'),
+    body('gender')
+      .notEmpty().withMessage('Gender is required')
+      .isIn(['Male','Female','Other','Prefer not to answer'])
+      .withMessage('Invalid gender selection')
+  ],
+  async function(req, res, next) {
+    // 1) validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log('Validation errors:', errors.array());
+      return res.status(400).render('survey', {
+        userID: req.body.userID,
+        error:  errors.array()[0].msg
+      });
+    }
 
-  const surveyData = {
-    age: parseInt(req.body.age),
-    gender: sanitizeHtml(req.body.gender),
-    education: sanitizeHtml(req.body.education),
-    vision: sanitizeHtml(req.body.vision),
-    timestamp: new Date()
-  };
+    // 2) sanitize + assemble
+    const userID     = sanitizeHtml(req.body.userID);
+    const surveyData = {
+      age:    sanitizeHtml(req.body.age),
+      gender: sanitizeHtml(req.body.gender)
+    };
 
-  try {
-    // Store in Firestore
-    await firestore.collection('demographics').doc(req.body.userID).set(surveyData);
-    res.redirect(`/activity/${req.body.userID}/debrief`);
-  } catch (error) {
-    console.error('Survey submission error:', error);
-    res.status(500).send('Error saving survey data');
+    console.log(`Received survey data for user: ${userID}`, surveyData);
+
+    try {
+      // 3) write to Firestore
+      await firestore.collection('surveys').add({
+        user: userID,
+        data: surveyData
+      });
+
+      // 4) redirect on success
+      return res.redirect(`/activity/${userID}/debrief`);
+
+    } catch (err) {
+      console.error('Error during survey submit:', err);
+      return res.status(500).send('Internal Server Error');
+    }
   }
-});
+);
 
 // Debrief page
 router.get('/activity/:userID/debrief', (req, res) => {
