@@ -51,6 +51,7 @@ body {
 
 .forbiddenP {
   text-align: center;
+  font-size: 1.5rem;
   background-color: #fcf8e3;
   border-color: #faf2cc;
   color: #8a6d3b;
