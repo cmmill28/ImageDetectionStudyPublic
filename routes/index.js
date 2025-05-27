@@ -74,7 +74,7 @@ const practiceQuestions = [
   { questionNumber: 8, correctAnswer: 'Yes', image: 'practice8.png', look:'bottom left' },
   { questionNumber: 9, correctAnswer: 'Yes', image: 'practice9.png', look:'top center' },
   { questionNumber: 10, correctAnswer: 'Yes', image: 'practice10.png', look:'bottom right' },
-  { questionNumber: 11, correctAnswer: 'Yes', image: 'practice11.png', look:'center left, behind reindeer' },
+  { questionNumber: 11, correctAnswer: 'Yes', image: 'practice11.png', look:'center right, behind reindeer' },
   { questionNumber: 12, correctAnswer: 'Yes', image: 'practice12.png', look:'bottom right' },
   { questionNumber: 13, correctAnswer: 'Yes', image: 'practice13.png', look:'top center' },
   { questionNumber: 14, correctAnswer: 'Yes', image: 'practice14.png', look:'bottom left' },
