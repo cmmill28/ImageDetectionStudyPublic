@@ -172,6 +172,24 @@ const imageData = {
 "Image61": { humanRec: "Correct",  machineRec: "Correct"   }
   };
   
+const CURATED_BLOCKS = {
+    0: [  1,  9, 13, 17, 18, 22, 23, 29, 31, 38,
+         42, 43, 47, 52, 55, 65, 67, 70, 78, 80 ],   // “Block 1”
+    1: [  4,  6, 12, 15, 16, 19, 28, 32, 34, 36,
+         41, 45, 46, 56, 58, 59, 69, 71, 72, 74 ],   // “Block 2”
+    2: [  5,  7,  8, 11, 24, 25, 26, 30, 33, 39,
+         48, 49, 50, 54, 62, 64, 73, 75, 76, 79 ],   // “Block 3”
+    3: [  2,  3, 10, 14, 20, 21, 27, 35, 37, 40,
+         44, 51, 53, 57, 60, 61, 63, 66, 68, 77 ]    // “Block 4”
+  };
+
+
+const imageToBlock = {};
+  Object.entries(CURATED_BLOCKS).forEach(([bid, arr]) =>
+    arr.forEach(n => { imageToBlock[n] = Number(bid); })
+  );
+
+
 
 // Function to convert ground truth and recommendation correctness to actual recommendation
 function getRecommendation(groundTruth, isCorrect) {
@@ -209,9 +227,10 @@ const images = Array.from({ length: 80 }, (_, i) => {
   
   return {
     filename: `image${imageNumber}.png`,
+    blockID:  imageToBlock[imageNumber],   // <<< new line
     recommendation: {
-      Crowd: getRecommendation(groundTruth, humanRec),
-      AI: getRecommendation(groundTruth, machineRec)
+      Crowd:  getRecommendation(groundTruth, humanRec),
+      AI:     getRecommendation(groundTruth, machineRec)
     }
   };
 });
@@ -351,54 +370,55 @@ router.get('/activity/:userID/buffer', (req, res) => {
 router.get('/activity/:userID/select_assistance', async (req, res) => {
   try {
     const userID = sanitizeHtml(req.params.userID);
-    console.log(`Fetching user record for ${userID} to display assistance selection`);
-    
-    // Fetch user record with validation
+    console.log(`[select_assistance] user=${userID}`);
+
+    /* ---------- 1. Pull the user session ---------------------------------- */
     const userRecord = await fetchUserRecord(userID);
-    
-    // Comprehensive validation with detailed error logging
     if (!userRecord) {
-      console.error(`User record not found for ID: ${userID}`);
+      console.error(`[select_assistance] session not found for ${userID}`);
       return res.status(404).send('User session not found. Please restart the activity.');
     }
-    
-    if (!userRecord.pairs || !Array.isArray(userRecord.pairs)) {
-      console.error(`Missing pairs array for user: ${userID}`);
+
+    /* ---------- 2. Basic sanity checks ------------------------------------ */
+    if (!Array.isArray(userRecord.pairs)) {
+      console.error(`[select_assistance] pairs array missing for ${userID}`);
       return res.status(500).send('Session data corrupted. Please contact the administrator.');
     }
-    
-    if (userRecord.currentIteration === undefined || 
-        userRecord.currentIteration >= userRecord.pairs.length) {
-      console.error(`Invalid iteration index ${userRecord.currentIteration} for user: ${userID}`);
+    const idx = userRecord.currentIteration;
+    if (idx == null || idx >= userRecord.pairs.length) {
+      console.error(`[select_assistance] bad iteration idx=${idx} for ${userID}`);
       return res.status(500).send('Session progress error. Please contact the administrator.');
     }
-    
-    const currentPair = userRecord.pairs[userRecord.currentIteration];
-    
-    if (!currentPair.pair || !Array.isArray(currentPair.pair) || currentPair.pair.length < 2) {
-      console.error(`Invalid pair structure at iteration ${userRecord.currentIteration} for user: ${userID}`);
-      console.error('Pair data:', JSON.stringify(currentPair));
+
+    const currentPair = userRecord.pairs[idx];
+    if (!Array.isArray(currentPair.pair) || currentPair.pair.length < 2) {
+      console.error(`[select_assistance] invalid pair data at iter ${idx} for ${userID}`, currentPair);
       return res.status(500).send('Configuration error with assistance types. Please contact the administrator.');
     }
-    
-    // Determine left and right options based on position
-    const isLeftPosition = currentPair.position === 'left';
-    const leftOption = isLeftPosition ? currentPair.pair[0] : currentPair.pair[1];
+
+    /* ---------- 3. Decide which adviser sits left vs. right --------------- */
+    // Acceptable values stored in session: 'left' or 'right'.
+    // If it’s missing (legacy data), choose randomly *for display only*.
+    const position = (currentPair.position === 'left' || currentPair.position === 'right')
+                     ? currentPair.position
+                     : (Math.random() < 0.5 ? 'left' : 'right');
+
+    const isLeftPosition = (position === 'left');
+    const leftOption  = isLeftPosition ? currentPair.pair[0] : currentPair.pair[1];
     const rightOption = isLeftPosition ? currentPair.pair[1] : currentPair.pair[0];
-    
-    // Log rendering information for debugging
-    console.log(`Rendering assistance selection for user ${userID}, iteration ${userRecord.currentIteration}`);
-    console.log(`Left option: ${leftOption.type}_${leftOption.size}, Right option: ${rightOption.type}_${rightOption.size}`);
-    
-    // Render the selection page
+
+    console.log(`[select_assistance] iter=${idx}  LEFT=${leftOption.type}_${leftOption.size}  RIGHT=${rightOption.type}_${rightOption.size}`);
+
+    /* ---------- 4. Render the selection page ------------------------------ */
     res.render('select_assistance', {
-      userID: userID,
-      leftOption: leftOption,
-      rightOption: rightOption,
-      iteration: userRecord.currentIteration
+      userID,
+      leftOption,
+      rightOption,
+      iteration: idx
     });
-  } catch (error) {
-    console.error('Error in select_assistance route:', error);
+
+  } catch (err) {
+    console.error('Error in select_assistance route:', err);
     res.status(500).send('An unexpected error occurred. Please try again later.');
   }
 });
@@ -408,11 +428,11 @@ router.post('/activity/:userID/select_assistance', async (req, res) => {
   const userID = sanitizeHtml(req.params.userID);
   const selectedOption = req.body.selectedOption;
   const timeTaken = parseFloat(req.body.timeTaken) || 0;
-  
+
   // Update user session
   const userRecord = await fetchUserRecord(userID);
   const currentPair = userRecord.pairs[userRecord.currentIteration];
-  
+
   // Determine which option was selected based on position and selection
   let chosenOption;
   if (selectedOption === 'left') {
@@ -420,58 +440,59 @@ router.post('/activity/:userID/select_assistance', async (req, res) => {
   } else {
     chosenOption = currentPair.position === 'left' ? currentPair.pair[1] : currentPair.pair[0];
   }
-  
+
+  // 🔄 Flip: actual = unselected
+  const unselectedOption = (chosenOption === currentPair.pair[0]) ? currentPair.pair[1] : currentPair.pair[0];
   userRecord.pairs[userRecord.currentIteration].selected = chosenOption;
+  userRecord.pairs[userRecord.currentIteration].actual = unselectedOption; // FLIPPED
   userRecord.pairs[userRecord.currentIteration].completed = true;
   userRecord.pairs[userRecord.currentIteration].timeTaken = timeTaken;
-  
-  // Reset question index for the new assisted round
+
+  // Reset question index for assisted round
   userRecord.currentQuestion = 0;
-  
+
   await storeUserSession(userID, userRecord);
-  
-  // Redirect to first question in assisted round
+
+  // Move to first assisted question
   res.redirect(`/activity/${userID}/assisted_round/0`);
 });
 
+
 // Display assisted question
 router.get('/activity/:userID/assisted_round/:questionIndex', async (req, res) => {
-  const userID = sanitizeHtml(req.params.userID);
+  const userID       = sanitizeHtml(req.params.userID);
   const questionIndex = parseInt(req.params.questionIndex, 10);
-  
-  const userRecord = await fetchUserRecord(userID);
-  const currentIteration = userRecord.currentIteration;
+
+  const userRecord    = await fetchUserRecord(userID);
+  const currentPair   = userRecord.pairs[userRecord.currentIteration];   // ← NEW
+
   const currentBlockID = userRecord.currentBlock;
-  
-  // Get current block images
-  const blockImages = await getImageBlock(userID, currentBlockID);
-  const currentImage = blockImages[questionIndex];
-  
-  // Get selected assistance (CORRECTED)
-  const currentPair = userRecord.pairs[currentIteration];
-  const selectedAssistance = currentPair.selected || { type: 'unknown', size: 'unknown', color: '#000000' };
-  const selectedType = selectedAssistance.type;
-  const selectedSize = selectedAssistance.size;
-  const selectedColor = selectedAssistance.color;
-  
-  // Determine recommendation based on selected assistance type
-  const recommendation = selectedType === 'human' ? 
-    currentImage.recommendationCrowd : 
-    currentImage.recommendationAI;
-  
+  const blockImages    = await getImageBlock(userID, currentBlockID);
+  const currentImage   = blockImages[questionIndex];
+
+  /* -------- pick advisers ------------------------------------ */
+  const displayAssistance = currentPair.selected;    // what the user thinks they picked
+  const actualAssistance  = currentPair.actual;      // secretly powers the advice
+  /* ------------------------------------------------------------ */
+
+  const recommendation = (actualAssistance.type === 'human')
+      ? currentImage.recommendationCrowd
+      : currentImage.recommendationAI;
+
   res.render('assisted_round', {
-    userID: userID,
-    iteration: currentIteration,
+    userID,
+    iteration: userRecord.currentIteration,
     questionNumber: questionIndex + 1,
     questionImage: currentImage.filename,
-    recommendation: recommendation,
-    assistanceType: `${selectedType} ${selectedSize}`,
-    assistanceColor: selectedColor,
+    recommendation,                                     // from actual
+    assistanceType:  `${displayAssistance.type} ${displayAssistance.size}`, // label
+    assistanceColor: displayAssistance.color,
     totalQuestions: 20,
     progress: Math.floor((questionIndex / 20) * 100),
     skipEnabled: skipAssistedRoundEnabled
   });
 });
+
 // Handle skipping the rest of the assisted round (for testing)
 router.post('/activity/:userID/skip-assisted-round', (req, res) => {
   const userID = sanitizeHtml(req.params.userID);
@@ -508,6 +529,8 @@ router.post('/activity/:userID/assisted_round', async (req, res) => {
     recommendation: recommendation,
     assistanceType: userRecord.pairs[userRecord.currentIteration].selected.type,
     assistanceSize: userRecord.pairs[userRecord.currentIteration].selected.size,
+    actualAssistanceType: userRecord.pairs[userRecord.currentIteration].actual.type,
+    actualAssistanceSize: userRecord.pairs[userRecord.currentIteration].actual.size,
     timestamp: new Date()
   };
   
@@ -754,30 +777,22 @@ function seededShuffle(array, seed) {
 
 // Create 4 blocks of 20 images each with seeded randomization
 function assignUserImageBlocks(userID) {
-  // We assume images are pre-configured with both human and machine recommendations
-  // and already organized into 4 blocks of 20 images
-  
-  // Create empty blocks
-  const blocks = [[], [], [], []];
-  
-  // First separate images into their appropriate initial blocks
-  // This maintains the curated blocks with balanced accuracy scores
-  const imageBlocks = [
-    images.slice(0, 20),   // Block 1: images 0-19
-    images.slice(20, 40),  // Block 2: images 20-39
-    images.slice(40, 60),  // Block 3: images 40-59
-    images.slice(60, 80)   // Block 4: images 60-79
-  ];
-  
-  // Now shuffle WITHIN each block to randomize order
-  // while maintaining the block integrity
+  const blocks = [[], [], [], []];           // prepare 4 buckets
+
+  images.forEach(img => {
+    const bid = img.blockID;                 // 0-3 from step 2
+    if (bid === undefined)
+      throw new Error(`Block ID missing for image ${img.filename}`);
+    blocks[bid].push(img);
+  });
+
+  // Shuffle *within* each curated block (seeded per-user)
   for (let i = 0; i < 4; i++) {
-    // Use a different seed for each block to ensure different shuffling
-    blocks[i] = seededShuffle(imageBlocks[i], `${userID}-block-${i}`);
+    blocks[i] = seededShuffle(blocks[i], `${userID}-block-${i}`);
   }
-  
-  return blocks;
+  return blocks;                             // [ [20], [20], [20], [20] ]
 }
+
 
 
 // Initialize user session with all necessary data
