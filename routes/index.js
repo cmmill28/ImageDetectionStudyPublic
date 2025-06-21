@@ -865,6 +865,9 @@ async function fetchUserRecord(userID) {
       ]
     }));
   }
+  if (sessionData) {
+    userSessions[userID] = sessionData;      // <-- NEW LINE
+  }
 
   return sessionData;
 }
