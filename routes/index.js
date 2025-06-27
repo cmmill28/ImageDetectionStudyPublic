@@ -426,69 +426,53 @@ router.get('/activity/:userID/select_assistance', async (req, res) => {
 // Handle assistance selection
 router.post('/activity/:userID/select_assistance', async (req, res) => {
   const userID = sanitizeHtml(req.params.userID);
-  const selectedOption = req.body.selectedOption;
-  const timeTaken = parseFloat(req.body.timeTaken) || 0;
+  const selectedSide = req.body.selectedOption;          // 'left' or 'right'
+  const timeTaken     = parseFloat(req.body.timeTaken) || 0;
 
-  // Update user session
-  const userRecord = await fetchUserRecord(userID);
+  const userRecord  = await fetchUserRecord(userID);
   const currentPair = userRecord.pairs[userRecord.currentIteration];
 
-  // Determine which option was selected based on position and selection
-  let chosenOption;
-  if (selectedOption === 'left') {
-    chosenOption = currentPair.position === 'left' ? currentPair.pair[0] : currentPair.pair[1];
-  } else {
-    chosenOption = currentPair.position === 'left' ? currentPair.pair[1] : currentPair.pair[0];
-  }
+  const chosen =
+      selectedSide === 'left'
+      ? (currentPair.position === 'left'  ? currentPair.pair[0] : currentPair.pair[1])
+      : (currentPair.position === 'left'  ? currentPair.pair[1] : currentPair.pair[0]);
 
-  // 🔄 Flip: actual = unselected
-  const unselectedOption = (chosenOption === currentPair.pair[0]) ? currentPair.pair[1] : currentPair.pair[0];
-  userRecord.pairs[userRecord.currentIteration].selected = chosenOption;
-  userRecord.pairs[userRecord.currentIteration].actual = unselectedOption; // FLIPPED
-  userRecord.pairs[userRecord.currentIteration].completed = true;
-  userRecord.pairs[userRecord.currentIteration].timeTaken = timeTaken;
+  /* --- write choice straight back, no deception --- */
+  currentPair.selected   = chosen;
+  currentPair.completed  = true;
+  currentPair.timeTaken  = timeTaken;
 
-  // Reset question index for assisted round
   userRecord.currentQuestion = 0;
-
   await storeUserSession(userID, userRecord);
 
-  // Move to first assisted question
   res.redirect(`/activity/${userID}/assisted_round/0`);
 });
 
 
 // Display assisted question
 router.get('/activity/:userID/assisted_round/:questionIndex', async (req, res) => {
-  const userID = sanitizeHtml(req.params.userID);
-  const qIdx   = parseInt(req.params.questionIndex, 10);
+  const userID        = sanitizeHtml(req.params.userID);
+  const qIdx          = parseInt(req.params.questionIndex, 10);
 
-  /* ----- pull session & image --------------------------------- */
-  const session   = await fetchUserRecord(userID);
-  const pair      = session.pairs[session.currentIteration];
+  const session       = await fetchUserRecord(userID);
+  const pair          = session.pairs[session.currentIteration];
 
-  const blockImgs = await getImageBlock(userID, session.currentBlock);
-  const img       = blockImgs[qIdx];
+  const blockImgs     = await getImageBlock(userID, session.currentBlock);
+  const img           = blockImgs[qIdx];
 
-  /* ----- adviser logic ---------------------------------------- */
-  const adviserShown  = pair.selected;                       // label on screen
-  const adviserHidden = (adviserShown === pair.pair[0])      // unseen adviser
-                        ? pair.pair[1] : pair.pair[0];
-
-  // 🔄  FLIP: use hidden adviser’s answer
-  const recommendation = adviserHidden.type === 'human'
+  const assistance    = pair.selected;  // what the participant chose
+  const recommendation = assistance.type === 'human'
         ? img.recommendationCrowd
         : img.recommendationAI;
 
-  /* ----- render ------------------------------------------------ */
   res.render('assisted_round', {
     userID,
-    iteration:      session.currentIteration,
+    iteration: session.currentIteration,
     questionNumber: qIdx + 1,
-    questionImage:  img.filename,
-    recommendation,                                   // from hidden adviser
-    assistanceType: `${adviserShown.type} ${adviserShown.size}`,  // label shown
-    assistanceColor: adviserShown.color,
+    questionImage: img.filename,
+    recommendation,
+    assistanceType:  `${assistance.type} ${assistance.size}`,
+    assistanceColor: assistance.color,
     totalQuestions: 20,
     progress: Math.floor((qIdx / 20) * 100),
     skipEnabled: skipAssistedRoundEnabled
@@ -521,18 +505,16 @@ router.post('/activity/:userID/assisted_round', async (req, res) => {
   
   // Log the response data
   const responseData = {
-    userID: userID,
+    userID,
     iteration: userRecord.currentIteration,
-    question: userRecord.currentQuestion,
-    answer: answer,
-    timeTaken: timeTaken,
-    timeExpired: timeExpired,
+    question:  userRecord.currentQuestion,
+    answer,
+    timeTaken,
+    timeExpired,
     image: questionImage,
-    recommendation: recommendation,
-    assistanceType: userRecord.pairs[userRecord.currentIteration].selected.type,
-    assistanceSize: userRecord.pairs[userRecord.currentIteration].selected.size,
-    actualAssistanceType: userRecord.pairs[userRecord.currentIteration].actual.type,
-    actualAssistanceSize: userRecord.pairs[userRecord.currentIteration].actual.size,
+    recommendation,
+    assistanceType: pair.selected.type,
+    assistanceSize: pair.selected.size,
     timestamp: new Date()
   };
   
