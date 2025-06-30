@@ -502,6 +502,7 @@ router.post('/activity/:userID/assisted_round', async (req, res) => {
   const recommendation = req.body.recommendation;
   
   let userRecord = await fetchUserRecord(userID);
+  const pair = userRecord.pairs[userRecord.currentIteration]; 
   
   // Log the response data
   const responseData = {
